@@ -52,7 +52,7 @@ function init() {
         .json({ success: false, message: 'Internal server error' });
     }
   });
-  app.listen(process.env.PORT || 4000, () => console.log('Server is running'));
+  app.listen(8000, () => console.log('Server is running'));
 }
 
 init();
