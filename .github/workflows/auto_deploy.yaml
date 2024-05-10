@@ -39,7 +39,7 @@ jobs:
           rm -rf tsconfig.json
           rm -rf README.md
       - name: production node_modules
-        run: npm run install
+        run: npm install
       - name: check folders
         run: tree -h -L 1
       - name: check sizes of directories
