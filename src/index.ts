@@ -1,5 +1,5 @@
 import express, { Response, Request } from 'express';
-import { data } from './data/ProductData';
+import { data } from './data/ProductData/index.js';
 import cors from 'cors';
 
 function init() {
@@ -39,13 +39,11 @@ function init() {
           .json({ success: false, message: 'all filed required' });
       }
 
-      return res
-        .status(200)
-        .json({
-          data: req.body,
-          succes: true,
-          message: 'product buy successfully',
-        });
+      return res.status(200).json({
+        data: req.body,
+        succes: true,
+        message: 'product buy successfully',
+      });
     } catch (error) {
       return res
         .status(500)
