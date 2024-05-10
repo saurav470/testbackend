@@ -1,0 +1,58 @@
+name: lms deployemnt
+
+
+on: [push]
+
+
+jobs:
+  serverDeployment:
+    
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.url.outputs.preview-name  }} 
+  
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup node in machine
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'v18.19.0'
+      - name: Install node_module
+        run: npm ci
+      - name: build
+        run: npm run build
+      - name: remove unrequired file folder
+        run: |
+          rm -rf src
+          rm -rf node_modules
+          rm -rf .github
+          rm -rf .husky
+          rm -rf .eslintrc.cjs
+          rm -rf .eslintignore
+          rm -rf .gitignore
+          rm -rf .prettierignore
+          rm -rf .prettierrc
+          rm -rf tsconfig.json
+          rm -rf README.md
+      - name: production node_modules
+        run: npm run prod_build
+      - name: check folders
+        run: tree -h -L 1
+      - name: check sizes of directories
+        run: tree --du -ahF dist/ | grep "\(files\|/\)$"
+      - name: deploye to vercel
+        uses: amondnet/vercel-action@v20
+        id: url
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+      - name: deployed url
+        run: echo "${{ steps.url.outputs.preview-url }}"  
+       
+
